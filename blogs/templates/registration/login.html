@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Вход в систему</title>
+</head>
+<body>
+    <h1>Вход в систему</h1>
+    
+    <form method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+        <div>
+            <label for="username">Имя пользователя:</label>
+            <input type="text" name="username" id="username" required>
+        </div>
+        <div>
+            <label for="password">Пароль:</label>
+            <input type="password" name="password" id="password" required>
+        </div>
+        <div>
+            <input type="submit" value="Войти">
+        </div>
+    </form>
+</body>
+</html>
