@@ -1,6 +1,7 @@
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
 from django.views.generic import TemplateView
+from django.conf.urls import handler404
 from .views import (
     BlogListView,
     BlogDetailView,
@@ -12,6 +13,8 @@ from .views import (
     PostByCategoryListView,
     PostByTagListView,
 )
+
+handler404 = 'blogs.views.custom_404_view'
 
 urlpatterns = [
     path("new/", BlogCreateView.as_view(), name="post_new"),

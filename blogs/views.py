@@ -6,6 +6,7 @@ from django.shortcuts import redirect, get_object_or_404, render
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.template import RequestContext
 
 
 from .models import Post, Comment, Category, Tag
@@ -100,3 +101,7 @@ class PostByTagListView(ListView):
     def get_queryset(self):
         tag = get_object_or_404(Tag, slug=self.kwargs['tag_slug'])
         return Post.objects.filter(tags=tag)
+
+
+def custom_404_view(request, exception):
+    return render(request, '404.html', {'message': 'К сожалению, страница не существует'}, status=404)
