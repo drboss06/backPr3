@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from django.contrib.auth import views as auth_views
 from django.views.generic import TemplateView
 from .views import (
@@ -26,4 +26,5 @@ urlpatterns = [
     path('home/', TemplateView.as_view(template_name='post/post_new.html'), name='home'),
     path('category/<slug:category_slug>/', PostByCategoryListView.as_view(), name='post_list_by_category'),
     path('tag/<slug:tag_slug>/', PostByTagListView.as_view(), name='post_list_by_tag'),
+    path('ckeditor/', include('ckeditor_uploader.urls')),
 ]

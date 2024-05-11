@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 from pathlib import Path
 from django.contrib.messages import constants as messages
 from environs import Env
+import os
 
 env = Env()
 env.read_env()
@@ -46,6 +47,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
+    "ckeditor",
 
 
     "crispy_forms",
@@ -54,6 +57,10 @@ INSTALLED_APPS = [
     "articles",
     "blogs"
 ]
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+CKEDITOR_UPLOAD_PATH = 'uploads/'
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
