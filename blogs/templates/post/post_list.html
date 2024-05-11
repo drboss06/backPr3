@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+{% extends "base.html" %}
+{% comment %} <!DOCTYPE html>
 <html>
 <head>
     <title>Post List</title>
@@ -11,4 +12,53 @@
         {% endfor %}
     </ul>
 </body>
-</html>
+</html> {% endcomment %}
+
+
+{% block title %}Список постов{% endblock title %}
+{% block header %}Список постов{% endblock header %}
+
+{% block content %}
+
+<a href="{% url 'post_new' %}">Создать пост</a>
+
+<div class="post-list">
+    {% for post in post_list %}
+        <div class="card">
+            <h2>{{ post.name }}</h2>
+            <p>{{ post.description }}</p>
+            <img src="{{ post.featured_image.url }}" alt="{{ post.name }}">
+            <p><strong>Category:</strong> {{ post.category }}</p>
+            <p><strong>Tags:</strong>
+                {% for tag in post.tags.all %}
+                    {{ tag.name }}{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            </p>
+            <p><strong>Author:</strong> {{ post.author }}</p>
+            <div class="d-flex gap-1">
+                <a href="{{ post.get_absolute_url }}" class="btn btn-success btn-sm">Обновить</a>
+                <a href="{% url 'post_delete' post.pk %}" class="btn btn-danger btn-sm">Удалить</a>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+
+{% endblock content %}
