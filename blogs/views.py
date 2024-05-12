@@ -7,20 +7,51 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.template import RequestContext
-
+from django.db.models import Q
 
 from .models import Post, Comment, Category, Tag
+from .forms import PostSearchForm
 
 
 class BlogListView(ListView):
     model = Post
-    paginate_by = 2
+    paginate_by = 3
     template_name = "post/post_list.html"
+    
+    context_object_name = 'posts'
+    form_class = PostSearchForm
 
+    
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        search_query = self.request.GET.get('search_query')
+        category = self.request.GET.get('category')
+
+        if search_query:
+            queryset = queryset.filter(Q(name__icontains=search_query) | Q(description__icontains=search_query))
+
+        if category:
+            queryset = queryset.filter(category=category)
+            
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = self.form_class(self.request.GET)
+        
+        return context
 
 class BlogDetailView(DetailView):
     model = Post
     template_name = "post/post_detail.html"
+    slug_url_kwarg = 'slug'
+    
+
+    def get_object(self, queryset=None):
+        if 'pk' in self.kwargs:
+            return super().get_object(queryset)
+        slug = self.kwargs.get(self.slug_url_kwarg)
+        return get_object_or_404(self.get_queryset(), slug=slug)
 
 
 class BlogCreateView(SuccessMessageMixin, CreateView):
