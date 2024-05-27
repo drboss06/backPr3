@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     
     "ckeditor",
+    'ckeditor_uploader',
 
 
     "crispy_forms",
@@ -57,6 +58,18 @@ INSTALLED_APPS = [
     "articles",
     "blogs"
 ]
+
+CKEDITOR_UPLOAD_PATH = "uploads/"
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'full',
+        'height': 300,
+        'width': '100%',
+    },
+}
+
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 

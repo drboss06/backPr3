@@ -10,7 +10,7 @@ from django.template import RequestContext
 from django.db.models import Q
 
 from .models import Post, Comment, Category, Tag
-from .forms import PostSearchForm
+from .forms import PostSearchForm, PostForm
 
 
 class BlogListView(ListView):
@@ -54,20 +54,42 @@ class BlogDetailView(DetailView):
         return get_object_or_404(self.get_queryset(), slug=slug)
 
 
+# class BlogCreateView(SuccessMessageMixin, CreateView):
+#     model = Post
+#     template_name = "post/post_new.html"
+#     fields = ["name", "description", "featured_image", "category", "tags"]
+#     success_message = "%(name)s успешно создан"
+
+#     def form_valid(self, form):
+#         form.instance.author = self.request.user
+#         return super().form_valid(form)
+
 class BlogCreateView(SuccessMessageMixin, CreateView):
     model = Post
+    form_class = PostForm
     template_name = "post/post_new.html"
-    fields = ["name", "description", "featured_image", "category", "tags"]
     success_message = "%(name)s успешно создан"
 
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
 
-class BlogUpdateView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+
+# class BlogUpdateView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+#     model = Post
+#     template_name = "post/post_edit.html"
+#     fields = ["name", "description", "featured_image", "category", "tags"]
+#     success_message = "%(name)s успешно обновлен"
+    
+#     def test_func(self):
+#         post = self.get_object()
+#         return self.request.user == post.author
+
+
+class BlogUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
+    form_class = PostForm
     template_name = "post/post_edit.html"
-    fields = ["name", "description", "featured_image", "category", "tags"]
     success_message = "%(name)s успешно обновлен"
     
     def test_func(self):

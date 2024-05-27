@@ -2,6 +2,7 @@ from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django.utils.text import slugify
+from ckeditor.fields import RichTextField
 
 # class Comment(models.Model):
 #     comment = models.TextField()
@@ -44,7 +45,8 @@ class Tag(models.Model):
 class Post(models.Model):
     name = models.CharField(max_length=255, verbose_name="Имя")
     slug = models.SlugField(blank=True)
-    description = models.TextField(verbose_name="Описание")
+    #description = models.TextField(verbose_name="Описание")
+    description = RichTextField()
     featured_image = models.ImageField(blank=True, default="default.jpg", upload_to="images/")
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     tags = models.ManyToManyField(Tag, blank=True)
